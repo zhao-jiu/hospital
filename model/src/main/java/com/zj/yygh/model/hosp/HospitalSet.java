@@ -1,5 +1,6 @@
 package com.zj.yygh.model.hosp;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.zj.yygh.model.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
