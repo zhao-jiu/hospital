@@ -1,5 +1,7 @@
 package com.zj.yygh.hosp.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zj.yygh.common.result.Result;
 import com.zj.yygh.hosp.service.HospitalSetService;
 import com.zj.yygh.model.hosp.HospitalSet;
@@ -43,13 +45,30 @@ public class HospitalSetController {
     }
 
     //3.添加医院设置
+    @ApiOperation(value = "添加或修改医院设置")
     @PostMapping("save")
     public Result saveHospitalSet(@RequestBody HospitalSet hospitalSet) {
-        boolean isSuccess = hospitalSetService.save(hospitalSet);
+        boolean isSuccess = hospitalSetService.saveOrUpdate(hospitalSet);
         if (isSuccess){
             return Result.ok();
         }
         return Result.fail();
+    }
+
+    //分页查询带条件
+    @ApiOperation(value = "分页查询带条件查询医院")
+    @GetMapping("list")
+    public Result selectPage(@RequestParam(defaultValue = "1") Long pageNum,
+                             @RequestParam(defaultValue = "10") Long pageSize) {
+        Page<HospitalSet> page = new Page<>(pageNum,pageSize);
+
+        QueryWrapper<HospitalSet> queryWrapper = new QueryWrapper<>();
+
+        queryWrapper.eq("is_deleted",0);
+
+        hospitalSetService.page(page,queryWrapper);
+
+        return Result.ok(page);
     }
 
 }
