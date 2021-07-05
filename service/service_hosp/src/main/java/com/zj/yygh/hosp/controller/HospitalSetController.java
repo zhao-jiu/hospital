@@ -37,7 +37,7 @@ public class HospitalSetController {
     @DeleteMapping("{id}")
     public Result removeHospSet(@PathVariable Long id) {
         boolean flag = hospitalSetService.removeById(id);
-        if(flag) {
+        if (flag) {
             return Result.ok();
         } else {
             return Result.fail();
@@ -49,26 +49,37 @@ public class HospitalSetController {
     @PostMapping("save")
     public Result saveHospitalSet(@RequestBody HospitalSet hospitalSet) {
         boolean isSuccess = hospitalSetService.saveOrUpdate(hospitalSet);
-        if (isSuccess){
+        if (isSuccess) {
             return Result.ok();
         }
         return Result.fail();
     }
 
-    //分页查询带条件
+    //4.分页查询带条件
     @ApiOperation(value = "分页查询带条件查询医院")
     @GetMapping("list")
     public Result selectPage(@RequestParam(defaultValue = "1") Long pageNum,
                              @RequestParam(defaultValue = "10") Long pageSize) {
-        Page<HospitalSet> page = new Page<>(pageNum,pageSize);
+        Page<HospitalSet> page = new Page<>(pageNum, pageSize);
 
         QueryWrapper<HospitalSet> queryWrapper = new QueryWrapper<>();
 
-        queryWrapper.eq("is_deleted",0);
+        queryWrapper.eq("is_deleted", 0);
 
-        hospitalSetService.page(page,queryWrapper);
+        hospitalSetService.page(page, queryWrapper);
 
         return Result.ok(page);
     }
+
+    //5.根据id查询
+    @ApiOperation(value = "根据id查询医院信息")
+    @GetMapping("findById/{id}")
+    public Result findById(@PathVariable("id") Long id) {
+
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+
+        return Result.ok(hospitalSet);
+    }
+
 
 }
