@@ -58,8 +58,8 @@ public class HospitalSetController {
     //4.分页查询带条件
     @ApiOperation(value = "分页查询带条件查询医院")
     @GetMapping("list")
-    public Result selectPage(@RequestParam(defaultValue = "1") Long pageNum,
-                             @RequestParam(defaultValue = "10") Long pageSize) {
+    public Result selectPage(@RequestParam(value = "pageNum", defaultValue = "1") Long pageNum,
+                             @RequestParam(value = "pageSize", defaultValue = "10") Long pageSize) {
         Page<HospitalSet> page = new Page<>(pageNum, pageSize);
 
         QueryWrapper<HospitalSet> queryWrapper = new QueryWrapper<>();
