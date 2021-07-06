@@ -3,6 +3,7 @@ package com.zj.yygh.hosp.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zj.yygh.common.result.Result;
+import com.zj.yygh.common.utils.MD5;
 import com.zj.yygh.hosp.service.HospitalSetService;
 import com.zj.yygh.model.hosp.HospitalSet;
 import com.zj.yygh.vo.hosp.HospitalSetQueryVo;
@@ -12,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author 赵赳
@@ -63,11 +65,31 @@ public class HospitalSetController {
      * @param hospitalSet
      * @return
      */
-    @ApiOperation(value = "添加或修改医院设置")
+    @ApiOperation(value = "添加医院设置")
     @PostMapping("save")
-    @ApiParam(name = "id", value = "医院设置JSONs数据", required = true)
+    @ApiParam(name = "hospitalSet", value = "医院设置JSON数据", required = true)
     public Result saveHospitalSet(@RequestBody HospitalSet hospitalSet) {
-        boolean isSuccess = hospitalSetService.saveOrUpdate(hospitalSet);
+        boolean isSuccess = hospitalSetService.save(hospitalSet);
+        //签名秘钥
+        String encrypt = MD5.encrypt(System.currentTimeMillis() + (new Random().nextInt(1000) + ""));
+        hospitalSet.setSignKey(encrypt);
+        if (isSuccess) {
+            return Result.ok();
+        }
+        return Result.fail();
+    }
+
+    /**
+     * 修改医院设置
+     *
+     * @param hospitalSet
+     * @return
+     */
+    @ApiOperation(value = "修改医院设置")
+    @PutMapping("update")
+    @ApiParam(name = "hospitalSet", value = "修改医院设置", required = true)
+    public Result updateHospitalSet(@RequestBody HospitalSet hospitalSet) {
+        boolean isSuccess = hospitalSetService.updateById(hospitalSet);
         if (isSuccess) {
             return Result.ok();
         }
@@ -141,6 +163,44 @@ public class HospitalSetController {
         } else {
             return Result.fail();
         }
+    }
+
+    /**
+     * 锁定医院信息
+     *
+     * @param id
+     * @param status
+     * @return
+     */
+    @PutMapping("lock/{id}/{status}")
+    public Result lock(@PathVariable Long id,
+                       @PathVariable Integer status) {
+
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+
+        hospitalSet.setStatus(status);
+
+        hospitalSetService.updateById(hospitalSet);
+
+        return Result.ok();
+    }
+
+    /**
+     * 发送签名秘钥
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping("sendKey/{id}")
+    public Result sendKey(@PathVariable Long id) {
+
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+
+        String hoscode = hospitalSet.getHoscode();
+        String signKey = hospitalSet.getSignKey();
+
+        //TODO 发送短信
+        return Result.ok();
     }
 
 
