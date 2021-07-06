@@ -1,4 +1,4 @@
-package com.zj.yygh.common.handle;
+package com.zj.yygh.common.handler;
 
 import com.zj.yygh.common.exception.YyghException;
 import com.zj.yygh.common.result.Result;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Description: 全局异常统一处理
  */
 @ControllerAdvice
-public class GlobalExceptionHandle {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
@@ -20,6 +20,11 @@ public class GlobalExceptionHandle {
         return Result.fail();
     }
 
+    /**
+     * 自定义异常处理
+     * @param e
+     * @return
+     */
     @ExceptionHandler(YyghException.class)
     @ResponseBody
     public Result yyghError(YyghException e) {
