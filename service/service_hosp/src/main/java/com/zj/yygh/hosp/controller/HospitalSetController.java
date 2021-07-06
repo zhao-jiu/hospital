@@ -24,7 +24,11 @@ public class HospitalSetController {
     @Autowired
     private HospitalSetService hospitalSetService;
 
-    //1 查询医院设置表所有信息
+    /**
+     * 查询医院设置表所有信息
+     *
+     * @return
+     */
     @ApiOperation(value = "获取所有医院设置")
     @GetMapping("findAll")
     public Result findAllHospitalSet() {
@@ -33,7 +37,11 @@ public class HospitalSetController {
         return Result.ok(list);
     }
 
-    //2 逻辑删除医院设置
+    /**
+     * 逻辑删除医院设置
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "逻辑删除医院设置")
     @DeleteMapping("{id}")
     @ApiParam(name = "id",value = "医院设置id",required = true)
@@ -46,7 +54,11 @@ public class HospitalSetController {
         }
     }
 
-    //3.添加医院设置
+    /**
+     * 添加或修改医院设置
+     * @param hospitalSet
+     * @return
+     */
     @ApiOperation(value = "添加或修改医院设置")
     @PostMapping("save")
     @ApiParam(name = "id",value = "医院设置JSONs数据",required = true)
@@ -58,7 +70,12 @@ public class HospitalSetController {
         return Result.fail();
     }
 
-    //4.分页查询带条件
+    /**
+     * 分页查询带条件
+     * @param pageNum 当前页码
+     * @param pageSize 分页条数
+     * @return
+     */
     @ApiOperation(value = "分页查询带条件查询医院")
     @GetMapping("list")
     @ApiImplicitParams({
@@ -78,7 +95,11 @@ public class HospitalSetController {
         return Result.ok(page);
     }
 
-    //5.根据id查询
+    /**
+     * 根据id查询
+     * @param id
+     * @return
+     */
     @ApiOperation(value = "根据id查询医院信息")
     @GetMapping("findById/{id}")
     @ApiParam(name = "id",value = "医院设置id",required = true)
@@ -87,6 +108,23 @@ public class HospitalSetController {
         HospitalSet hospitalSet = hospitalSetService.getById(id);
 
         return Result.ok(hospitalSet);
+    }
+
+    /**
+     * 批量删除医院设置信息
+     * @param ids 医院设置id数组
+     * @return
+     */
+    @ApiOperation(value = "批量删除医院设置信息")
+    @DeleteMapping("deleteBatch")
+    @ApiParam(name = "ids",value = "医院设置id数组",required = true)
+    public Result deleteBatch(@RequestBody List<Long> ids){
+        boolean isSuccess = hospitalSetService.removeByIds(ids);
+        if (isSuccess) {
+            return Result.ok();
+        }else {
+            return Result.fail();
+        }
     }
 
 
