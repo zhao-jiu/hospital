@@ -8,7 +8,6 @@ import com.zj.yygh.model.hosp.HospitalSet;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author 赵赳
