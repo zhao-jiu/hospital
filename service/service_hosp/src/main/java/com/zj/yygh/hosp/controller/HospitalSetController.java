@@ -20,7 +20,7 @@ import java.util.Random;
  * @CreateTime: 2021/7/4 16:50
  * @Description:
  */
-@Api("医院设置管理")
+@Api(tags = "医院设置管理")
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
 public class HospitalSetController {
@@ -173,6 +173,7 @@ public class HospitalSetController {
      * @return
      */
     @PutMapping("lock/{id}/{status}")
+    @ApiOperation(value = "锁定医院信息")
     public Result lock(@PathVariable Long id,
                        @PathVariable Integer status) {
 
@@ -192,6 +193,7 @@ public class HospitalSetController {
      * @return
      */
     @PutMapping("sendKey/{id}")
+    @ApiOperation(value = "发送签名秘钥")
     public Result sendKey(@PathVariable Long id) {
 
         HospitalSet hospitalSet = hospitalSetService.getById(id);
