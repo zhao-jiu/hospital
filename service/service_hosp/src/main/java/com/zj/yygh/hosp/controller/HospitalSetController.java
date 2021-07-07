@@ -18,9 +18,9 @@ import java.util.Random;
 /**
  * @author 赵赳
  * @CreateTime: 2021/7/4 16:50
- * @Description:
+ * @Description: 医院设置管理接口
  */
-@Api(tags = "医院设置管理")
+@Api(tags = "医院设置管理接口")
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
 public class HospitalSetController {
@@ -35,7 +35,7 @@ public class HospitalSetController {
      */
     @ApiOperation(value = "获取所有医院设置")
     @GetMapping("findAll")
-    public Result findAllHospitalSet() {
+    public Result<Object> findAllHospitalSet() {
         //调用service的方法
         List<HospitalSet> list = hospitalSetService.list();
         return Result.ok(list);
@@ -44,7 +44,7 @@ public class HospitalSetController {
     /**
      * 逻辑删除医院设置
      *
-     * @param id
+     * @param id 医院设置id
      * @return
      */
     @ApiOperation(value = "逻辑删除医院设置")
@@ -60,19 +60,19 @@ public class HospitalSetController {
     }
 
     /**
-     * 添加或修改医院设置
+     * 添加医院设置
      *
-     * @param hospitalSet
+     * @param hospitalSet 医院设置JSON数据
      * @return
      */
     @ApiOperation(value = "添加医院设置")
     @PostMapping("save")
     @ApiParam(name = "hospitalSet", value = "医院设置JSON数据", required = true)
     public Result saveHospitalSet(@RequestBody HospitalSet hospitalSet) {
-        boolean isSuccess = hospitalSetService.save(hospitalSet);
-        //签名秘钥
         String encrypt = MD5.encrypt(System.currentTimeMillis() + (new Random().nextInt(1000) + ""));
+        //签名秘钥
         hospitalSet.setSignKey(encrypt);
+        boolean isSuccess = hospitalSetService.save(hospitalSet);
         if (isSuccess) {
             return Result.ok();
         }
@@ -82,7 +82,7 @@ public class HospitalSetController {
     /**
      * 修改医院设置
      *
-     * @param hospitalSet
+     * @param hospitalSet 医院设置JSON数据
      * @return
      */
     @ApiOperation(value = "修改医院设置")
@@ -126,6 +126,8 @@ public class HospitalSetController {
         if (!StringUtils.isEmpty(vo.getHosname())) {
             queryWrapper.like("hosname", vo.getHosname());
         }
+        //未锁定状态
+        queryWrapper.eq("status",0);
         hospitalSetService.page(page, queryWrapper);
 
         return Result.ok(page);
@@ -134,7 +136,7 @@ public class HospitalSetController {
     /**
      * 根据id查询
      *
-     * @param id
+     * @param id 医院设置id
      * @return
      */
     @ApiOperation(value = "根据id查询医院信息")
@@ -168,7 +170,7 @@ public class HospitalSetController {
     /**
      * 锁定医院信息
      *
-     * @param id
+     * @param id 医院设置id
      * @param status
      * @return
      */
@@ -189,7 +191,7 @@ public class HospitalSetController {
     /**
      * 发送签名秘钥
      *
-     * @param id
+     * @param id 医院设置id
      * @return
      */
     @PutMapping("sendKey/{id}")
