@@ -17,12 +17,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result error(Exception e) {
+        e.printStackTrace();
         return Result.fail();
     }
 
     /**
      * 自定义异常处理
-     * @param e
+     * @param e 自定义异常
      * @return
      */
     @ExceptionHandler(YyghException.class)
@@ -30,6 +31,4 @@ public class GlobalExceptionHandler {
     public Result yyghError(YyghException e) {
         return Result.build(e.getCode(),e.getMessage());
     }
-
-
 }

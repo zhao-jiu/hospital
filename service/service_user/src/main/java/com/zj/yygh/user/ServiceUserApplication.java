@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Description:
  */
 @SpringBootApplication
-@ComponentScan("com.zj.yygh")
+@ComponentScan(basePackages = {"com.zj.yygh"})
 public class ServiceUserApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceUserApplication.class, args);
