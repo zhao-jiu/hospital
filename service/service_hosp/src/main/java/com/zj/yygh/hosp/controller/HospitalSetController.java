@@ -23,6 +23,7 @@ import java.util.Random;
 @Api(tags = "医院设置管理接口")
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
+@CrossOrigin
 public class HospitalSetController {
 
     @Autowired
@@ -48,7 +49,7 @@ public class HospitalSetController {
      * @return
      */
     @ApiOperation(value = "逻辑删除医院设置")
-    @DeleteMapping("{id}")
+    @DeleteMapping("delete/{id}")
     @ApiParam(name = "id", value = "医院设置id", required = true)
     public Result removeHospSet(@PathVariable Long id) {
         boolean flag = hospitalSetService.removeById(id);
@@ -117,17 +118,17 @@ public class HospitalSetController {
         QueryWrapper<HospitalSet> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.eq("is_deleted", 0);
-
-        //根据医院代码匹配查询
-        if (!StringUtils.isEmpty(vo.getHoscode())) {
-            queryWrapper.eq("hoscode", vo.getHoscode());
+        queryWrapper.orderByDesc("create_time");
+        if (vo != null) {
+            //根据医院代码匹配查询
+            if (!StringUtils.isEmpty(vo.getHoscode())) {
+                queryWrapper.eq("hoscode", vo.getHoscode());
+            }
+            //根据医院名称模糊查询
+            if (!StringUtils.isEmpty(vo.getHosname())) {
+                queryWrapper.like("hosname", vo.getHosname());
+            }
         }
-        //根据医院名称模糊查询
-        if (!StringUtils.isEmpty(vo.getHosname())) {
-            queryWrapper.like("hosname", vo.getHosname());
-        }
-        //未锁定状态
-        queryWrapper.eq("status",0);
         hospitalSetService.page(page, queryWrapper);
 
         return Result.ok(page);
@@ -170,14 +171,17 @@ public class HospitalSetController {
     /**
      * 锁定医院信息
      *
-     * @param id 医院设置id
+     * @param id     医院设置id
      * @param status
      * @return
      */
     @PutMapping("lock/{id}/{status}")
     @ApiOperation(value = "锁定医院信息")
-    public Result lock(@PathVariable Long id,
-                       @PathVariable Integer status) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "医院设置id", dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "是佛锁定状态 ", dataType = "Integer", paramType = "query")
+    })
+    public Result lock(@PathVariable Long id,@PathVariable Integer status) {
 
         HospitalSet hospitalSet = hospitalSetService.getById(id);
 
