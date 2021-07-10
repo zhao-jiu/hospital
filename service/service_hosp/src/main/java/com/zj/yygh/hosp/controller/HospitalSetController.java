@@ -118,7 +118,7 @@ public class HospitalSetController {
         QueryWrapper<HospitalSet> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.eq("is_deleted", 0);
-        queryWrapper.orderByDesc("create_time");
+        queryWrapper.orderByDesc("update_time");
         if (vo != null) {
             //根据医院代码匹配查询
             if (!StringUtils.isEmpty(vo.getHoscode())) {

@@ -2,6 +2,7 @@ package com.zj.yygh.common.handler;
 
 import com.zj.yygh.common.exception.YyghException;
 import com.zj.yygh.common.result.Result;
+import com.zj.yygh.common.result.ResultCodeEnum;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +19,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result error(Exception e) {
         e.printStackTrace();
-        return Result.fail();
+        return Result.fail(ResultCodeEnum.SERVICE_ERROR);
     }
 
     /**

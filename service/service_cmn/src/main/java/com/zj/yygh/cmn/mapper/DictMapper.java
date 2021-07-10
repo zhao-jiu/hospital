@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @Description:
  */
 @Mapper
-public interface DictSetMapper extends BaseMapper<Dict> {
+public interface DictMapper extends BaseMapper<Dict> {
 
 }
