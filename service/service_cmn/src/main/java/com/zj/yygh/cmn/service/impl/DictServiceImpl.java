@@ -10,6 +10,8 @@ import com.zj.yygh.cmn.service.DictService;
 import com.zj.yygh.model.cmn.Dict;
 import com.zj.yygh.vo.cmn.DictEeVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +33,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Resource
     private DictMapper dictMapper;
 
-
+    /**
+     * 使用redis缓存数据
+     * @Cacheable 开启缓存
+     * @param id
+     * @return
+     */
+    @Cacheable(value = "dict", keyGenerator = "keyGenerator")
     @Override
     public List<Dict> findChildData(Long id) {
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
@@ -45,6 +53,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         return dictList;
     }
 
+    /**
+     * 导出字典数据
+     * @param response
+     */
     @Override
     public void exportDictData(HttpServletResponse response) {
         try {
@@ -70,6 +82,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
+    /**
+     * allEntries = true 清空缓存中的数据
+     */
+    @CacheEvict(value = "dict",allEntries = true)
     @Override
     public void importDictData(MultipartFile file) throws IOException {
         EasyExcel.read(file.getInputStream(),DictEeVo.class,new DictListener(baseMapper)).sheet().doRead();

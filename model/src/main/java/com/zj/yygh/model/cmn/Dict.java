@@ -39,7 +39,7 @@ public class Dict {
 
     @ApiModelProperty(value = "逻辑删除(1:已删除，0:未删除)")
     @TableLogic
-    @TableField("is_deleted")
+    @TableField(value = "is_deleted",fill = FieldFill.INSERT)
     private Integer isDeleted;
 
     @ApiModelProperty(value = "其他参数")
