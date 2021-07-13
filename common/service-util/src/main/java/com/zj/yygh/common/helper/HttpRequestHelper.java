@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zj.yygh.common.utils.HttpUtil;
 import com.zj.yygh.common.utils.MD5;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.HashMap;

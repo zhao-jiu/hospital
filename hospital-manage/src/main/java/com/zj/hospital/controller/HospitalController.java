@@ -2,7 +2,6 @@ package com.zj.hospital.controller;
 
 import com.zj.hospital.service.ApiService;
 import com.zj.hospital.service.HospitalService;
-import com.atguigu.hospital.util.*;
 import com.zj.hospital.util.HttpRequestHelper;
 import com.zj.hospital.util.Result;
 import com.zj.hospital.util.ResultCodeEnum;
