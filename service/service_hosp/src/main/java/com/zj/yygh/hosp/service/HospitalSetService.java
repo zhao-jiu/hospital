@@ -11,6 +11,10 @@ import com.zj.yygh.model.hosp.HospitalSet;
  */
 public interface HospitalSetService extends IService<HospitalSet> {
 
-
-
+    /**
+     * 通过医院编码获取医院签名
+     * @param hoscode
+     * @return
+     */
+    String getByHoscode(String hoscode);
 }

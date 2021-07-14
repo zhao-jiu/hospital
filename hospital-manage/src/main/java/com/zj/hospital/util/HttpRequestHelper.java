@@ -49,11 +49,12 @@ public class HttpRequestHelper {
         for (Map.Entry<String, Object> param : sorted.entrySet()) {
             str.append(param.getValue()).append("|");
         }
-        str.append(signKey);
-        log.info("加密前：" + str.toString());
-        String md5Str = MD5.encrypt(str.toString());
-        log.info("加密后：" + md5Str);
-        return md5Str;
+        //str.append(signKey);
+        log.info("加密前：" + signKey);
+        //String md5Str = MD5.encrypt(str.toString());
+        String encrypt = MD5.encrypt(signKey);
+        log.info("加密后：" + encrypt);
+        return encrypt;
     }
 
     /**
