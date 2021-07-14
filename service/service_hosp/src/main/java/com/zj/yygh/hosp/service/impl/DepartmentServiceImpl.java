@@ -71,7 +71,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
                 .withIgnoreCase(true);
-
+        //查询对象
         Example<Department> example = Example.of(department,exampleMatcher);
 
         return departmentRepository.findAll(example, pageable);

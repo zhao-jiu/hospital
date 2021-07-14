@@ -67,7 +67,9 @@ public class ApiController {
 
         //删除排班信息
         scheduleService.removeSchedule(hoscode,hosScheduleId);
-
+        //日志打印
+        log.info("调用地址--->" + request.getRemoteAddr());
+        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok();
     }
 
@@ -223,7 +225,6 @@ public class ApiController {
         log.info("调用地址--->" + request.getRemoteAddr());
         log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok(hospital);
-
     }
 
     /**
@@ -257,16 +258,19 @@ public class ApiController {
      * @param paramsMap
      */
     private void verifySign(Map<String, Object> paramsMap) {
-
+        //参数中的签名
         String hospSign = (String) paramsMap.get("sign");
 
+        //医院编码
         String hoscode = (String) paramsMap.get("hoscode");
 
+        //通过hoscode查询数据库中的签名
         String signKey = hospitalSetService.getByHoscode(hoscode);
 
+        //MD5加密
         String signKeyMd5 = MD5.encrypt(signKey);
 
-        //进行签名校验
+        //进行签名校验 失败抛出异常
         if (!hospSign.equals(signKeyMd5)) {
             throw new YyghException(ResultCodeEnum.SIGN_ERROR);
         }
