@@ -9,9 +9,12 @@ import com.zj.yygh.common.utils.MD5;
 import com.zj.yygh.hosp.service.DepartmentService;
 import com.zj.yygh.hosp.service.HospitalService;
 import com.zj.yygh.hosp.service.HospitalSetService;
+import com.zj.yygh.hosp.service.ScheduleService;
 import com.zj.yygh.model.hosp.Department;
 import com.zj.yygh.model.hosp.Hospital;
+import com.zj.yygh.model.hosp.Schedule;
 import com.zj.yygh.vo.hosp.DepartmentQueryVo;
+import com.zj.yygh.vo.hosp.ScheduleQueryVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +44,86 @@ public class ApiController {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private ScheduleService scheduleService;
+
+    /**
+     * 删除排班信息
+     * @param request
+     * @return
+     */
+    @PostMapping("schedule/remove")
+    public Result<Object> removeSchedule(HttpServletRequest request) {
+        //获取请求参数
+        Map<String, String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramsMap = HttpRequestHelper.switchMap(requestMap);
+
+        String hoscode = (String) paramsMap.get("hoscode");
+        String hosScheduleId = (String) paramsMap.get("hosScheduleId");
+
+        //签名校验 检验失败抛出异常
+        verifySign(paramsMap);
+
+        //删除排班信息
+        scheduleService.removeSchedule(hoscode,hosScheduleId);
+
+        return Result.ok();
+    }
+
+    /**
+     * 查询排班信息
+     * @param request
+     * @return
+     */
+    @PostMapping("schedule/list")
+    public Result<Object> getSchedules(HttpServletRequest request) {
+        //获取请求参数
+        Map<String, String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramsMap = HttpRequestHelper.switchMap(requestMap);
+
+        //签名校验 检验失败抛出异常
+        verifySign(paramsMap);
+
+        Integer page = StringUtils.isEmpty(paramsMap.get("page"))?1:Integer.parseInt((String)paramsMap.get("page"));
+        Integer limit = StringUtils.isEmpty(paramsMap.get("limit"))?1:Integer.parseInt((String)paramsMap.get("limit"));
+        String hoscode = (String) paramsMap.get("hoscode");
+
+        //签名校验 检验失败抛出异常
+        verifySign(paramsMap);
+
+        ScheduleQueryVo queryVo = new ScheduleQueryVo();
+        queryVo.setHoscode(hoscode);
+        //查询排班信息
+        Page<Schedule> pageResult = scheduleService.getSchedules(page,limit,queryVo);
+        //日志打印
+        log.info("调用地址--->" + request.getRemoteAddr());
+        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+
+        return Result.ok(pageResult);
+    }
+
+
+    /**
+     * 上传排班信息
+     * @param request
+     * @return
+     */
+    @PostMapping("saveSchedule")
+    public Result<Object> saveSchedule(HttpServletRequest request) {
+        //获取请求参数
+        Map<String, String[]> requestMap = request.getParameterMap();
+        Map<String, Object> paramsMap = HttpRequestHelper.switchMap(requestMap);
+
+        //签名校验 检验失败抛出异常
+        verifySign(paramsMap);
+        //保存排班信息
+        scheduleService.save(paramsMap);
+        //日志打印
+        log.info("调用地址--->" + request.getRemoteAddr());
+        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+        return Result.ok();
+    }
 
     /**
      * 删除科室信息
@@ -87,7 +170,7 @@ public class ApiController {
 
         DepartmentQueryVo queryVo = new DepartmentQueryVo();
         queryVo.setHoscode(hoscode);
-
+        //查询科室信息
         Page<Department> pageResult = departmentService.getDepartments(page,limit,queryVo);
         //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
