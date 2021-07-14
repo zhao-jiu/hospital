@@ -42,6 +42,8 @@ public class HospitalServiceImpl implements HospitalService {
             hospital.setIsDeleted(0);
             hospitalRepository.save(hospital);
         }else {
+            //先删除数据
+            hospitalRepository.deleteById(hospitalExists.getId());
             //存在修改数据
             hospital.setStatus(hospitalExists.getStatus());
             hospital.setCreateTime(hospitalExists.getCreateTime());
@@ -49,9 +51,16 @@ public class HospitalServiceImpl implements HospitalService {
             hospital.setIsDeleted(0);
             hospitalRepository.save(hospital);
         }
+    }
 
 
-
-
+    /**
+     * 根据医院编码获取医院信息
+     * @param hoscode
+     * @return
+     */
+    @Override
+    public Hospital getHospByHoscode(String hoscode) {
+        return hospitalRepository.getHospitalByHoscode(hoscode);
     }
 }

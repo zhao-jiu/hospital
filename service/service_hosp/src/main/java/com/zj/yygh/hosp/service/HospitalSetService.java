@@ -2,6 +2,7 @@ package com.zj.yygh.hosp.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zj.yygh.model.hosp.Hospital;
 import com.zj.yygh.model.hosp.HospitalSet;
 
 /**
@@ -17,4 +18,6 @@ public interface HospitalSetService extends IService<HospitalSet> {
      * @return
      */
     String getByHoscode(String hoscode);
+
+
 }
