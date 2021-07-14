@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * @author ZhaoJiu
  * @CreateTime: 2021/7/13 15:15
- * @Description: 医院管理统一Api接口
+ * @Description: 医院信息上传统一Api接口
  */
 @RestController
 @RequestMapping("api/hosp")
