@@ -69,7 +69,8 @@ public class ApiController {
         scheduleService.removeSchedule(hoscode,hosScheduleId);
         //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
-        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+        log.info(Thread.currentThread().getStackTrace()[1].getMethodName() +
+                ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok();
     }
 
@@ -100,8 +101,8 @@ public class ApiController {
         Page<Schedule> pageResult = scheduleService.getSchedules(page,limit,queryVo);
         //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
-        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
-
+        log.info(Thread.currentThread().getStackTrace()[1].getMethodName() +
+                ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok(pageResult);
     }
 
@@ -122,8 +123,10 @@ public class ApiController {
         //保存排班信息
         scheduleService.save(paramsMap);
         //日志打印
+        //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
-        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+        log.info(Thread.currentThread().getStackTrace()[1].getMethodName() +
+                ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok();
     }
 
@@ -147,8 +150,10 @@ public class ApiController {
         //删除科室信息
         departmentService.removeDepartment(hoscode,depcode);
         //日志打印
+        //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
-        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+        log.info(Thread.currentThread().getStackTrace()[1].getMethodName() +
+                ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok();
     }
 
@@ -176,7 +181,8 @@ public class ApiController {
         Page<Department> pageResult = departmentService.getDepartments(page,limit,queryVo);
         //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
-        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+        log.info(Thread.currentThread().getStackTrace()[1].getMethodName() +
+                ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok(pageResult);
     }
 
@@ -199,7 +205,8 @@ public class ApiController {
         departmentService.save(paramsMap);
         //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
-        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+        log.info(Thread.currentThread().getStackTrace()[1].getMethodName() +
+                ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok();
     }
 
@@ -223,7 +230,8 @@ public class ApiController {
         Hospital hospital = hospitalService.getHospByHoscode(hoscode);
         //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
-        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+        log.info(Thread.currentThread().getStackTrace()[1].getMethodName() +
+                ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok(hospital);
     }
 
@@ -247,8 +255,10 @@ public class ApiController {
 
         //存储数据到mongodb中
         hospitalService.save(paramsMap);
+        //日志打印
         log.info("调用地址--->" + request.getRemoteAddr());
-        log.info(request.getMethod() + ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
+        log.info(Thread.currentThread().getStackTrace()[1].getMethodName() +
+                ": 方法执行了-->请求路径+" + request.getRequestURL().toString());
         return Result.ok();
     }
 
