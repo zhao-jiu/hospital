@@ -29,6 +29,35 @@ public class DictController {
     private DictService dictService;
 
     /**
+     * 根据dictCode查询下级节点
+     */
+    @GetMapping ("getByDictCode/{dictCode}")
+    @ApiOperation(value = "根据dictCode查询下级节点")
+    public Result<Object> getByDictCode(@PathVariable("dictCode") String dictCode) {
+        List<Dict> list = dictService.getByDictCode(dictCode);
+        return Result.ok(list);
+    }
+
+    /**
+     * 根据dictCode和value查询字典名称
+     */
+    @GetMapping ("getDictName/{dictCode}/{value}")
+    @ApiOperation(value = "根据dictCode和value查询字典名称")
+    public String getDictName(@PathVariable("dictCode") String dictCode, @PathVariable("value") String value) {
+        return dictService.getDictName(dictCode,value);
+    }
+
+    /**
+     * 根据value查询字典名称
+     */
+    @GetMapping ("getDictName/{value}")
+    @ApiOperation(value = "根据value查询字典名称")
+    public String getDictName(@PathVariable("value") String value) {
+        return dictService.getDictName("",value);
+    }
+
+
+    /**
      * 导入数据字典数据
      * @param file
      * @return
@@ -71,4 +100,6 @@ public class DictController {
 
         return Result.ok(list);
     }
+
+
 }

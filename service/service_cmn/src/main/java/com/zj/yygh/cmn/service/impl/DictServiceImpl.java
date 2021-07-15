@@ -92,6 +92,12 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         EasyExcel.read(file.getInputStream(),DictEeVo.class,new DictListener(baseMapper)).sheet().doRead();
     }
 
+    /**
+     *   根据dictCode和value查询字典名称
+     * @param dictCode
+     * @param value
+     * @return
+     */
     @Override
     public String getDictName(String dictCode, String value) {
 
@@ -100,7 +106,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             return dict.getName();
         }else {
             //先根据dictCode值查询对应的分类id
-            Long parentId = getDictByDictCode(dictCode);
+            Dict dictByDictCode = getDictByDictCode(dictCode);
+            Long parentId = dictByDictCode.getId();
             QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("parent_id",parentId).eq("value",value);
             Dict dict = baseMapper.selectOne(queryWrapper);
@@ -109,13 +116,24 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     }
 
     /**
+     * 根据dictCode查询下级节点
+     * @param dictCode
+     * @return
+     */
+    @Override
+    public List<Dict> getByDictCode(String dictCode) {
+        Dict dictByDictCode = getDictByDictCode(dictCode);
+        //根据id获取子节点
+        return findChildData(dictByDictCode.getId());
+    }
+
+    /**
      * 根据dictCode值查询对应的分类id
      */
-    private Long getDictByDictCode(String dictCode){
+    private Dict getDictByDictCode(String dictCode){
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("dict_code",dictCode);
-        Dict dict = baseMapper.selectOne(queryWrapper);
-        return dict.getId();
+        return baseMapper.selectOne(queryWrapper);
     }
 
 

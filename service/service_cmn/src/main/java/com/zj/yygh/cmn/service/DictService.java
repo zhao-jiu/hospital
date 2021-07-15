@@ -40,4 +40,11 @@ public interface DictService extends IService<Dict> {
      * 查询字典名称
      */
     String getDictName(String dictCode, String value);
+
+    /**
+     * 根据dictCode查询下级节点
+     * @param dictCode
+     * @return
+     */
+    List<Dict> getByDictCode(String dictCode);
 }

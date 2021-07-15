@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * @author 赵赳
  * @CreateTime: 2021/7/4 16:19
- * @Description:  踩坑日记：@EnableFeignClients(basePackages = {"com.zj"}) 找不到对应的feign接口
+ * @Description:  踩坑日记：@EnableFeignClients basePackages必须指定对应的扫包规则 找不到对应的feign接口
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.zj"})
