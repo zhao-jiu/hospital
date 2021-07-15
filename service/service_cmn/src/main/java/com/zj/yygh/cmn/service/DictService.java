@@ -35,4 +35,9 @@ public interface DictService extends IService<Dict> {
      * @param file
      */
     void importDictData(MultipartFile file) throws IOException;
+
+    /**
+     * 查询字典名称
+     */
+    String getDictName(String dictCode, String value);
 }

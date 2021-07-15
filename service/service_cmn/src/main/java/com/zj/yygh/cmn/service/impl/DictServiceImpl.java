@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -90,6 +91,33 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     public void importDictData(MultipartFile file) throws IOException {
         EasyExcel.read(file.getInputStream(),DictEeVo.class,new DictListener(baseMapper)).sheet().doRead();
     }
+
+    @Override
+    public String getDictName(String dictCode, String value) {
+
+        if (StringUtils.isEmpty(dictCode)){
+            Dict dict = baseMapper.selectOne(new QueryWrapper<Dict>().eq("value", value));
+            return dict.getName();
+        }else {
+            //先根据dictCode值查询对应的分类id
+            Long parentId = getDictByDictCode(dictCode);
+            QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("parent_id",parentId).eq("value",value);
+            Dict dict = baseMapper.selectOne(queryWrapper);
+            return dict.getName();
+        }
+    }
+
+    /**
+     * 根据dictCode值查询对应的分类id
+     */
+    private Long getDictByDictCode(String dictCode){
+        QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("dict_code",dictCode);
+        Dict dict = baseMapper.selectOne(queryWrapper);
+        return dict.getId();
+    }
+
 
     /**
      * 判断字段数据下面是否有子数据
