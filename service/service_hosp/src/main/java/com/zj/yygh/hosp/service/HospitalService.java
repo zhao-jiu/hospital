@@ -28,5 +28,19 @@ public interface HospitalService {
     /**
      * 获取医院列表
      */
-    Page<Hospital> getHospitalList(Integer pageNum, Integer pageSize, HospitalQueryVo hospitalQueryVo);
+    Page<Hospital> getHospitalList(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo);
+
+    /**
+     * 更新医院状态
+     * @param id
+     * @param status
+     */
+    void updateStatus(String id, Integer status);
+
+    /**
+     * 获取医院详情信息
+     * @param id
+     * @return
+     */
+    Map<String, Object> getHospDetail(String id);
 }

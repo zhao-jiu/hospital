@@ -3,9 +3,12 @@ package com.zj.yygh.common.handler;
 import com.zj.yygh.common.exception.YyghException;
 import com.zj.yygh.common.result.Result;
 import com.zj.yygh.common.result.ResultCodeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+
 
 /**
  * @author ZhaoJiu
@@ -13,12 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Description: 全局异常统一处理
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public Result error(Exception e) {
-        e.printStackTrace();
+    public Result<Object> error(Exception e) {
+        log.info("error: "+e.getMessage());
         return Result.fail(ResultCodeEnum.SERVICE_ERROR);
     }
 
@@ -29,7 +33,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(YyghException.class)
     @ResponseBody
-    public Result yyghError(YyghException e) {
+    public Result<Object> yyghError(YyghException e) {
+        log.info("error: "+e.getMessage());
         return Result.build(e.getCode(),e.getMessage());
     }
 }

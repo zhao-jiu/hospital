@@ -12,6 +12,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -77,9 +78,9 @@ public class HospitalServiceImpl implements HospitalService {
      * 获取医院列表
      */
     @Override
-    public Page<Hospital> getHospitalList(Integer pageNum, Integer pageSize, HospitalQueryVo hospitalQueryVo) {
+    public Page<Hospital> getHospitalList(Integer page, Integer limit, HospitalQueryVo hospitalQueryVo) {
         //分页对象
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Pageable pageable = PageRequest.of(page - 1, limit);
 
         //将查询条件对象转换为Department对象
         Hospital hospital = new Hospital();
@@ -94,19 +95,48 @@ public class HospitalServiceImpl implements HospitalService {
                 .withIgnoreCase(true);
         //查询对象
         Example<Hospital> example = Example.of(hospital, exampleMatcher);
-        Page<Hospital> page = hospitalRepository.findAll(example, pageable);
+        Page<Hospital> pages = hospitalRepository.findAll(example, pageable);
 
-        page.getContent().forEach(item ->{
+        pages.getContent().forEach(item ->{
              setHospitalHosType(item);
         });
 
-        return page;
+        return pages;
+    }
+
+    /**
+     * 更新医院状态
+     * @param id
+     * @param status
+     */
+    @Override
+    public void updateStatus(String id, Integer status) {
+        Hospital hospital = hospitalRepository.findById(id).get();
+        hospital.setStatus(status);
+        hospital.setUpdateTime(new Date());
+        hospitalRepository.save(hospital);
+    }
+
+    /**
+     * 获取医院详情信息
+     * @param id 医院id
+     * @return 医院详细信息
+     */
+    @Override
+    public Map<String, Object> getHospDetail(String id) {
+        Map<String, Object> result = new HashMap<>();
+        Hospital hospital = setHospitalHosType(hospitalRepository.findById(id).get());
+
+        result.put("hospital",hospital);
+        result.put("bookingRule", hospital.getBookingRule());
+        hospital.setBookingRule(null);
+
+        return result;
     }
 
     /**
      * 设置医院信息
      * @param hospital
-     * @return
      */
     private Hospital setHospitalHosType(Hospital hospital) {
         //获取医院等级名称
@@ -117,7 +147,7 @@ public class HospitalServiceImpl implements HospitalService {
         String districtString = dictFeignClient.getDictName(hospital.getDistrictCode());
 
         hospital.getParam().put("hostypeString",hostypeString);
-        hospital.getParam().put("address",provinceString+cityString+districtString);
+        hospital.getParam().put("fullAddress",provinceString+cityString+districtString);
         return hospital;
     }
 
