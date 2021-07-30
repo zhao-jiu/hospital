@@ -1,4 +1,4 @@
-# yygh-parent1
+# yygh-parent
 
 #### 介绍
 医院挂号系统
